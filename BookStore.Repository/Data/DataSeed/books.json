@@ -1,0 +1,51 @@
+[
+    {
+        "Name": "Food for Fitness",
+        "Author": "Anita Bean",
+        "Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+        "Price": 150,
+        "PictureUrl": "images/products/9ac831_4fa8c443b5364e588980f1e14e0f5cd1~mv2.jpg",
+        "CategoryId": 1
+    },
+    {
+        "Name": "Clubbing",
+        "Author": "Andi Watson",
+        "Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+        "Price": 250,
+        "PictureUrl": "images/products/9ac831_7c1620466c4e43ca8e74ea8d631d24ae~mv2.jpg",
+        "CategoryId": 2
+    },
+    {
+        "Name": "book",
+        "Author": "Anita Bean",
+        "Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+        "Price": 150,
+        "PictureUrl": "images/products/9ac831_19a50590b2bb44499699a7c99a3e67ea~mv2.jpg",
+        "CategoryId": 5
+    },
+    {
+        "Name": "war",
+        "Author": "Anita Bean",
+        "Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+        "Price": 150,
+        "PictureUrl": "images/products/9ac831_23a235abb1854489aaafcff8da6ad2a6~mv2.jpg",
+        "CategoryId": 4
+    },
+    {
+        "Name": "shehab",
+        "Author": "Anita Bean",
+        "Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+        "Price": 300,
+        "PictureUrl": "images/products/9ac831_28ee0133ff6245568393c1a1b0e02239~mv2.jpg",
+        "CategoryId": 3
+    },
+    {
+        "Name": "sameh",
+        "Author": "Anita Bean",
+        "Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+        "Price": 600,
+        "PictureUrl": "images/products/9ac831_81ddde069f45402a8784a38e527af9c6~mv2.jpg",
+        "CategoryId": 6
+    }
+]
+    
