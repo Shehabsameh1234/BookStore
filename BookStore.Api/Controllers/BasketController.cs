@@ -34,9 +34,22 @@ namespace BookStore.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<CustomerBasket>> CreateOrUpdateBasket(CustomerBasket basket)
         {
-           var createdOrUpdateBasket= await _basketRepository.UpdateBasketAsync(basket);
-            if (createdOrUpdateBasket == null) return BadRequest(new ApisResponse(400));
-            return Ok(createdOrUpdateBasket);   
+            var getBasket = await _basketRepository.GetBasketById(basket.Id);
+            if (getBasket != null)
+            {
+                foreach (var item in basket.Items)
+                {
+                   getBasket.Items.Add(item);
+                }
+                await _basketRepository.UpdateBasketAsync(getBasket);
+                return Ok(getBasket);
+            }
+            else
+            {
+                var createdOrUpdateBasket = await _basketRepository.UpdateBasketAsync(basket);
+                if (createdOrUpdateBasket == null) return BadRequest(new ApisResponse(400));
+                return Ok(createdOrUpdateBasket);
+            }
         }
 
     }
