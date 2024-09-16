@@ -27,7 +27,7 @@ namespace BookStore.Api.Controllers
         {
             var result = new
             {
-                DeleteStatus = await _basketRepository.DeleteBasketAsync(basketId) ? "true" : "basket not found"
+                DeleteStatus = await _basketRepository.DeleteBasketAsync(basketId) ? "deleted" : "basket not found"
             };
            return Ok(result);
         }
