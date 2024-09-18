@@ -48,13 +48,15 @@ namespace BookStore.Api.Controllers
 
 
         }
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status401Unauthorized)]
         [HttpPost("logIn")]
         public async Task<ActionResult<UserDto>> LogIn(LogInDto logInDto)
         {
             var user =await _userManager.FindByEmailAsync(logInDto.Email);
-            if (user == null) return Unauthorized(new ApisResponse(404, "Invalid LogIn"));
+            if (user == null) return Unauthorized(new ApisResponse(401, "Invalid LogIn"));
             var result =await _signInManager.CheckPasswordSignInAsync(user, logInDto.Password,false);
-            if (!result.Succeeded) return BadRequest(new ApisResponse(404, "Invalid LogIn"));
+            if (!result.Succeeded) return BadRequest(new ApisResponse(400, "Invalid LogIn"));
             return Ok(new UserDto()
             {
                 DisplayName = user.UserName,

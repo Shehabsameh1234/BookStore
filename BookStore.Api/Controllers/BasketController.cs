@@ -1,4 +1,5 @@
 ﻿using BookStore.Api.Errors;
+using BookStore.Core.Dtos;
 using BookStore.Core.Entities.Basket;
 using BookStore.Core.Repository.Contract;
 using BookStore.Core.Service.Contract;
@@ -18,6 +19,8 @@ namespace BookStore.Api.Controllers
             _basketRepository = basketRepository;
             _basketService = basketService;
         }
+        [ProducesResponseType(typeof(CustomerBasket), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<CustomerBasket>> GetBasket(string id)
         {
@@ -34,6 +37,8 @@ namespace BookStore.Api.Controllers
             };
            return Ok(result);
         }
+        [ProducesResponseType(typeof(CustomerBasket), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status400BadRequest)]
         [HttpPost]
         public async Task<ActionResult<CustomerBasket>> AddItemToBasket(string basketId,int productId )
         {
