@@ -54,6 +54,15 @@ namespace BookStore.Api.Controllers
             if (basket == null) return NotFound(new ApisResponse(404, "product or basket not found"));
             return Ok(basket);
         }
+        [ProducesResponseType(typeof(CustomerBasket), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
+        [HttpPut]
+        public async Task<ActionResult<CustomerBasket>> UpdateItemQuantity(string basketId, int productId,int quantity)
+        {
+            var basket = await _basketService.UpdateItemQuantityAsync(basketId, productId,quantity);
+            if(basket==null) return NotFound(new ApisResponse(404, "product or basket not found"));
+            return Ok(basket);
+        }
 
     }
 }

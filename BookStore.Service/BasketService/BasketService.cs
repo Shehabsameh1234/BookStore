@@ -57,19 +57,14 @@ namespace BookStore.Service.BasketService
 
         public async Task<CustomerBasket?> DeleteItemFromBasketAsync(string basketId, int productId)
         {
-            var item = new BasketItems()
-            {
-                ProductId = productId,
-                Quantity = 1,
-            };
             var getBasket = await _basketRepository.GetBasketById(basketId);
             if (getBasket != null)
             {
                 foreach (var item1 in getBasket.Items)
                 {
-                    if (item1.ProductId == item.ProductId)
+                    if (item1.ProductId == productId)
                     {
-                        var ooo=getBasket.Items.Remove(item1);
+                        getBasket.Items.Remove(item1);
                         await _basketRepository.UpdateBasketAsync(getBasket);
                         return getBasket;
                     }
@@ -79,6 +74,26 @@ namespace BookStore.Service.BasketService
             }
             else return null;
 
+        }
+
+        public async Task<CustomerBasket?> UpdateItemQuantityAsync(string basketId, int productId, int quantity)
+        {
+            var getBasket = await _basketRepository.GetBasketById(basketId);
+            if (getBasket != null)
+            {
+                foreach (var item1 in getBasket.Items)
+                {
+                    if (item1.ProductId == productId)
+                    {
+                        item1.Quantity = quantity;
+                        await _basketRepository.UpdateBasketAsync(getBasket);
+                        return getBasket;
+                    }
+                    else return null;
+                }
+                return null;
+            }
+            else return null;
         }
     }
 }
