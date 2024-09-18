@@ -8,6 +8,7 @@ using BookStore.Repository.ConText;
 using BookStore.Repository.Identity;
 using BookStore.Repository.UnitOfWork;
 using BookStore.Service.AuthService;
+using BookStore.Service.BasketService;
 using BookStore.Service.BooksService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,8 @@ namespace BookStore.Api.Extentions
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 
             services.AddScoped(typeof(IBooksService), typeof(BooksService));
+            services.AddScoped(typeof(IBasketService), typeof(BasketService));
+
             services.AddScoped(typeof(IAuthService), typeof(AuthService));
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddDbContext<StoreContext>(options =>
