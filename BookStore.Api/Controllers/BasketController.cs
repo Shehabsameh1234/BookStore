@@ -32,21 +32,39 @@ namespace BookStore.Api.Controllers
            return Ok(result);
         }
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> CreateOrUpdateBasket(CustomerBasket basket)
+        public async Task<ActionResult<CustomerBasket>> AddItemToBasket(string basketId,int productId )
         {
-            var getBasket = await _basketRepository.GetBasketById(basket.Id);
+            var item = new BasketItems()
+            {
+                ProductId = productId,
+                Quantity = 1,
+            };
+            var getBasket = await _basketRepository.GetBasketById(basketId);
             if (getBasket != null)
             {
-                foreach (var item in basket.Items)
+              
+                foreach (var item1 in getBasket.Items)
                 {
-                   getBasket.Items.Add(item);
+                    if (item1.ProductId == item.ProductId)
+                    {
+                        return BadRequest(new ApisResponse(400,"item Already in basket"));
+                    }
                 }
+                getBasket.Items.Add(item);
                 await _basketRepository.UpdateBasketAsync(getBasket);
                 return Ok(getBasket);
+
             }
             else
             {
-                var createdOrUpdateBasket = await _basketRepository.UpdateBasketAsync(basket);
+                List<BasketItems> basketItems = new List<BasketItems>();
+                basketItems.Add(item);
+                var customerBasket = new CustomerBasket()
+                {
+                    Id = basketId,
+                    Items = basketItems
+                };
+                var createdOrUpdateBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
                 if (createdOrUpdateBasket == null) return BadRequest(new ApisResponse(400));
                 return Ok(createdOrUpdateBasket);
             }
