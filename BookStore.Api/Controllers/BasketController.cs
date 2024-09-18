@@ -1,9 +1,7 @@
 ﻿using BookStore.Api.Errors;
-using BookStore.Core.Dtos;
 using BookStore.Core.Entities.Basket;
 using BookStore.Core.Repository.Contract;
 using BookStore.Core.Service.Contract;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Api.Controllers
@@ -46,6 +44,15 @@ namespace BookStore.Api.Controllers
             if (basket == null) return BadRequest(new ApisResponse(400, "item Already in basket"));
             return Ok(basket);
        
+        }
+        [ProducesResponseType(typeof(CustomerBasket), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
+        [HttpDelete("deleteItem")]
+        public async Task<ActionResult<CustomerBasket>> DeleteItemFromBasket(string basketId, int productId)
+        {
+            var basket = await _basketService.DeleteItemFromBasketAsync(basketId,productId);
+            if (basket == null) return NotFound(new ApisResponse(404, "product or basket not found"));
+            return Ok(basket);
         }
 
     }

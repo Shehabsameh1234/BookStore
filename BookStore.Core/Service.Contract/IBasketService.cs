@@ -10,5 +10,6 @@ namespace BookStore.Core.Service.Contract
     public interface IBasketService
     {
         Task<CustomerBasket?> AddItemToBasketAsync(string basketId,int productId);
+        Task<CustomerBasket?> DeleteItemFromBasketAsync(string basketId, int productId);
     }
 }
