@@ -10,5 +10,6 @@ namespace BookStore.Core.Entities.Basket
     {
         public string Id { get; set; }
         public List<BasketItems> Items { get; set; }
+        public decimal TotalAmount { get; set; }
     } 
 }
