@@ -12,16 +12,20 @@ namespace BookStore.Service.BasketService
     public class BasketService : IBasketService
     {
         private readonly IBasketRepository _basketRepository;
+        private readonly IBooksService _booksService;
 
-        public BasketService(IBasketRepository basketRepository)
+        public BasketService(IBasketRepository basketRepository,IBooksService booksService)
         {
             _basketRepository = basketRepository;
+            _booksService = booksService;
         }
-        public async Task<CustomerBasket?> AddItemToBasketAsync(string basketId, int productId)
+        public async Task<CustomerBasket?> AddItemToBasketAsync(string basketId, int bookiD)
         {
+            var book = await _booksService.GetBookAsync(bookiD);
+            if (book == null) return null;
             var item = new BasketItems()
             {
-                ProductId = productId,
+                ProductId = bookiD,
                 Quantity = 1,
             };
             var getBasket = await _basketRepository.GetBasketById(basketId);
