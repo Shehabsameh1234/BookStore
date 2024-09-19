@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using BookStore.Core.Dtos;
+using BookStore.Core.Entities.Basket;
 using BookStore.Core.Entities.Books;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 
 namespace BookStore.Core.Helpers
@@ -17,6 +14,9 @@ namespace BookStore.Core.Helpers
             CreateMap<Book,BookDto>()
                 .ForMember(b=>b.Category,o=>o.MapFrom(s=>s.Category.Name))
                 .ForMember(b=>b.PictureUrl,o=>o.MapFrom<BookPuctureUrlResolver>());
+            CreateMap<CustomerBasket, CustomerBasketDto>();
+            CreateMap<BasketItems, BasketItemsDto>();
+
         }
 
 
