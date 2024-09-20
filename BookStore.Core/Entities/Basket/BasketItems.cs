@@ -10,6 +10,7 @@ namespace BookStore.Core.Entities.Basket
     {
         public int Id { get; set; }
         public int Quantity { get; set;}
+        public int InStock { get; set; }
         public string Name { get; set; } = null!;
         public string Author { get; set; } = null!;
         public string PictureUrl { get; set; } = null!;

@@ -25,7 +25,7 @@ namespace BookStore.Service.BasketService
         public async Task<CustomerBasket?> AddItemToBasketAsync(string basketId, int bookiD)
         {
             var book = await _booksService.GetBookAsync(bookiD);
-            if (book == null) return null;
+            if (book == null || book.InStock<1) return null;
             var item = new BasketItems()
             {
                 Id = bookiD,
@@ -34,6 +34,7 @@ namespace BookStore.Service.BasketService
                 PictureUrl = $"{ _configuration["AppUrl"]}/{book.PictureUrl}",
                 Name= book.Name,
                 Author= book.Author,
+                InStock=book.InStock,
             };
             var getBasket = await _basketRepository.GetBasketById(basketId);
             if (getBasket != null)
@@ -92,7 +93,7 @@ namespace BookStore.Service.BasketService
 
         public async Task<CustomerBasket?> UpdateItemQuantityAsync(string basketId, int productId, int quantity)
         {
-            var getBasket = await _basketRepository.GetBasketById(basketId);
+                        var getBasket = await _basketRepository.GetBasketById(basketId);
             if (getBasket != null)
             {
                 foreach (var item1 in getBasket.Items)
