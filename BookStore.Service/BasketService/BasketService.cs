@@ -1,6 +1,7 @@
 ﻿using BookStore.Core.Entities.Basket;
 using BookStore.Core.Repository.Contract;
 using BookStore.Core.Service.Contract;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace BookStore.Service.BasketService
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IBooksService _booksService;
+        private readonly IConfiguration _configuration;
 
-        public BasketService(IBasketRepository basketRepository,IBooksService booksService)
+        public BasketService(IBasketRepository basketRepository,IBooksService booksService,IConfiguration configuration)
         {
             _basketRepository = basketRepository;
             _booksService = booksService;
+            _configuration = configuration;
         }
         public async Task<CustomerBasket?> AddItemToBasketAsync(string basketId, int bookiD)
         {
@@ -25,8 +28,12 @@ namespace BookStore.Service.BasketService
             if (book == null) return null;
             var item = new BasketItems()
             {
-                ProductId = bookiD,
+                Id = bookiD,
                 Quantity = 1,
+                Price = book.Price,
+                PictureUrl = $"{ _configuration["AppUrl"]}/{book.PictureUrl}",
+                Name= book.Name,
+                Author= book.Author,
             };
             var getBasket = await _basketRepository.GetBasketById(basketId);
             if (getBasket != null)
@@ -34,12 +41,13 @@ namespace BookStore.Service.BasketService
 
                 foreach (var item1 in getBasket.Items)
                 {
-                    if (item1.ProductId == item.ProductId)
+                    if (item1.Id == item.Id)
                     {
                         return null;
                     }
                 }
                 getBasket.Items.Add(item);
+                getBasket.TotalAmount = getBasket.Items.Sum(b => b.TotalPrice);
                 await _basketRepository.UpdateBasketAsync(getBasket);
                 return getBasket;
 
@@ -51,7 +59,8 @@ namespace BookStore.Service.BasketService
                 var customerBasket = new CustomerBasket()
                 {
                     Id = basketId,
-                    Items = basketItems
+                    Items = basketItems,
+                    TotalAmount= basketItems.Sum(b=>b.TotalPrice)
                 };
                 var createdOrUpdateBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
                 if (createdOrUpdateBasket == null) return null;
@@ -66,9 +75,10 @@ namespace BookStore.Service.BasketService
             {
                 foreach (var item1 in getBasket.Items)
                 {
-                    if (item1.ProductId == productId)
+                    if (item1.Id == productId)
                     {
                         getBasket.Items.Remove(item1);
+                        getBasket.TotalAmount = getBasket.Items.Sum(b => b.TotalPrice);
                         await _basketRepository.UpdateBasketAsync(getBasket);
                         return getBasket;
                     }
@@ -87,13 +97,13 @@ namespace BookStore.Service.BasketService
             {
                 foreach (var item1 in getBasket.Items)
                 {
-                    if (item1.ProductId == productId)
+                    if (item1.Id == productId)
                     {
                         item1.Quantity = quantity;
+                        getBasket.TotalAmount = getBasket.Items.Sum(b => b.TotalPrice);
                         await _basketRepository.UpdateBasketAsync(getBasket);
                         return getBasket;
                     }
-                    else return null;
                 }
                 return null;
             }

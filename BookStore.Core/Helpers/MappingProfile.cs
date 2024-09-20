@@ -14,9 +14,7 @@ namespace BookStore.Core.Helpers
             CreateMap<Book,BookDto>()
                 .ForMember(b=>b.Category,o=>o.MapFrom(s=>s.Category.Name))
                 .ForMember(b=>b.PictureUrl,o=>o.MapFrom<BookPuctureUrlResolver>());
-            CreateMap<CustomerBasket, CustomerBasketDto>();
-            CreateMap<BasketItems, BasketItemsDto>();
-
+          
         }
 
 

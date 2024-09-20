@@ -24,15 +24,11 @@ namespace BookStore.Api.Controllers
         [ProducesResponseType(typeof(CustomerBasket), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
-        public async Task<ActionResult<CustomerBasketDto>> GetBasket(string id)
+        public async Task<ActionResult<CustomerBasket>> GetBasket(string id)
         {
             var basket = await _basketRepository.GetBasketById(id);
             if(basket == null) return NotFound(new ApisResponse(404));
-            _mapper.Map<List<BasketItems>, List<BasketItemsDto>>(basket.Items);
-            var mappedBasket = _mapper.Map<CustomerBasket, CustomerBasketDto>(basket);
-            
-
-            return Ok(mappedBasket);
+            return Ok(basket);
         }
         [HttpDelete]
         public async Task<ActionResult> DeleteBasket(string basketId)
@@ -67,6 +63,7 @@ namespace BookStore.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<CustomerBasket>> UpdateItemQuantity(string basketId, int productId,int quantity)
         {
+            if (quantity <= 0) return BadRequest(new ApisResponse(400, "quntity must be above 0  "));
             var basket = await _basketService.UpdateItemQuantityAsync(basketId, productId,quantity);
             if(basket==null) return NotFound(new ApisResponse(404, "product or basket not found"));
             return Ok(basket);
