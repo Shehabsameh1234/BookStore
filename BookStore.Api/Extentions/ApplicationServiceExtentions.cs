@@ -47,6 +47,9 @@ namespace BookStore.Api.Extentions
                 return ConnectionMultiplexer.Connect(Connection);
             });
 
+            //stripe configuration
+            services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
+
             return services;
         }
     }
