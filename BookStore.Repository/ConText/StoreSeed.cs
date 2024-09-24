@@ -1,4 +1,5 @@
 ﻿using BookStore.Core.Entities.Books;
+using BookStore.Core.Entities.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,24 @@ namespace BookStore.Repository.ConText
                     foreach (var book in books)
                     {
                         storeContext.Books.Add(book);
+                    }
+                    await storeContext.SaveChangesAsync();
+                }
+            }
+            if (storeContext.DeliveryMethods.Count() == 0)
+            {
+                //1-get BrandsData (jsonFile Path)
+                var deliveryData = File.ReadAllText("../BookStore.Repository/Data/DataSeed/delivery.json");
+                //2-Deserialize from json to list
+                var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+
+                //3-add to data base
+                if (deliveryMethods?.Count() > 0)
+                {
+
+                    foreach (var method in deliveryMethods)
+                    {
+                        storeContext.DeliveryMethods.Add(method);
                     }
                     await storeContext.SaveChangesAsync();
                 }
