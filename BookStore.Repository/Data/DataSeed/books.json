@@ -5,7 +5,8 @@
         "Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
         "Price": 150,
         "PictureUrl": "images/products/9ac831_4fa8c443b5364e588980f1e14e0f5cd1~mv2.jpg",
-        "CategoryId": 1
+        "CategoryId": 1,
+        "InStock" : 10
     },
     {
         "Name": "Clubbing",

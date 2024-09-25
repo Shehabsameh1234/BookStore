@@ -2,6 +2,7 @@
 using BookStore.Api.Extentions;
 using BookStore.Repository.ConText;
 using BookStore.Repository.Identity;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Api
@@ -18,7 +19,9 @@ namespace BookStore.Api
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(); 
+            builder.Services.AddSwaggerGen();
+            //auth services
+            builder.Services.AddAuthServicees(builder.Configuration);
             #endregion
 
             var app = builder.Build();
