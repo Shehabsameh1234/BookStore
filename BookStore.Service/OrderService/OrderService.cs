@@ -2,6 +2,7 @@
 using BookStore.Core.IUnitOfWork;
 using BookStore.Core.Repository.Contract;
 using BookStore.Core.Service.Contract;
+using BookStore.Core.Specifications.OrderSpecifications;
 
 namespace BookStore.Service.OrderService
 {
@@ -38,6 +39,19 @@ namespace BookStore.Service.OrderService
             if(result <=0) return null;
             return order;
 
+        }
+
+        public async Task<Order?> UpdateOrderSatus(int orderId)
+        {
+            var spec =new OrderWithDeliveryMethodSpecifications(orderId);
+           var order =await  _unitOfWork.Repository<Order>().GetByIdWithSpecAsync(spec);
+           if (order == null) return null;
+
+           order.OrderStatus = OrderStatus.PaymentRecieved;
+
+           _unitOfWork.Repository<Order>().Update(order);
+           await  _unitOfWork.CompleteAsync();
+           return order;
         }
     }
 }

@@ -36,5 +36,15 @@ namespace BookStore.Api.Controllers
 
             return Ok(mappedOrder);
         }
+
+        [HttpPut]
+        public async Task<ActionResult<OrderToReturnDto>> UpdateOrderStatus(int orderId)
+        {
+            var order =await _orderService.UpdateOrderSatus(orderId);
+            if (order == null) return NotFound(new ApisResponse(404));
+            var mappedOrder = _mapper.Map<OrderToReturnDto>(order);
+            return Ok(mappedOrder);
+
+        }
     }
 }
