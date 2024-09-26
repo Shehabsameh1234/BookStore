@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using System.Security.Claims;
 
 namespace BookStore.Api.Controllers
 {
- 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrderController : ApiBaseController
     {
         private readonly IOrderService _orderService;
@@ -24,7 +25,6 @@ namespace BookStore.Api.Controllers
             _orderService = orderService;
             _mapper = mapper;
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<ActionResult<OrderToReturnDto>> CreateOrder(OrderDto orderDto)
         {
@@ -46,5 +46,17 @@ namespace BookStore.Api.Controllers
             return Ok(mappedOrder);
 
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetUserOrders()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var orders =await  _orderService.GetUserOrders(email);
+            if (orders == null) return NotFound(new ApisResponse(404));
+            var mappedOrder = _mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders);
+            return Ok(mappedOrder);
+        }
+
+
     }
 }

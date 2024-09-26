@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace BookStore.Core.Specifications.OrderSpecifications
 {
-    public class OrderWithDeliveryMethodSpecifications:BaseSpecifications<Order>
+    public class OrderSpecifications : BaseSpecifications<Order>
     {
-        public OrderWithDeliveryMethodSpecifications(int id):base(o=>o.Id==id)
+        public OrderSpecifications(string email) : base(o => o.BuyerEmail == email)
         {
             Includes.Add(o => o.DeliveryMethod);
             Includes.Add(o => o.OrderItems);
 
         }
-
     }
 }

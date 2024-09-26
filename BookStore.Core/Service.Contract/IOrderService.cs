@@ -11,5 +11,6 @@ namespace BookStore.Core.Service.Contract
     {
         Task<Order?> CreateOrderAsync(string basketId,string buyerEmail , OrderAddress orderAddress,int deliveryMethodId);
         Task<Order?> UpdateOrderSatus(int orderId);
+        Task<IReadOnlyList<Order?>> GetUserOrders(string email);
     }
 }

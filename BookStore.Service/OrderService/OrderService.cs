@@ -53,5 +53,13 @@ namespace BookStore.Service.OrderService
            await  _unitOfWork.CompleteAsync();
            return order;
         }
+
+        public async Task<IReadOnlyList<Order?>> GetUserOrders(string email)
+        {
+            var spec = new OrderSpecifications(email);
+            var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
+            if (orders == null) return null;
+            return orders;
+        }
     }
 }
