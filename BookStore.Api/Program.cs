@@ -22,6 +22,15 @@ namespace BookStore.Api
             builder.Services.AddSwaggerGen();
             //auth services
             builder.Services.AddAuthServicees(builder.Configuration);
+            //add cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy", policyOtions =>
+                {
+                    policyOtions.AllowAnyHeader().AllowAnyMethod()
+                    .WithOrigins(builder.Configuration["FrontBaseUrl"]);
+                });
+            });
             #endregion
 
             var app = builder.Build();
@@ -72,8 +81,10 @@ namespace BookStore.Api
 
             app.UseStaticFiles();
 
-            app.UseAuthorization();
+            app.UseCors("MyPolicy");
 
+            app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllers(); 
             #endregion
