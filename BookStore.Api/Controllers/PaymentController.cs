@@ -1,26 +1,45 @@
-﻿using BookStore.Core.Helpers;
+﻿using AutoMapper;
+using BookStore.Api.Errors;
+using BookStore.Core.Dtos;
+using BookStore.Core.Entities.Orders;
+using BookStore.Core.Helpers;
+using BookStore.Core.Service.Contract;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
+using System.Security.Claims;
+using static System.Net.WebRequestMethods;
+
 
 namespace BookStore.Api.Controllers
 {
-  
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PaymentController : ApiBaseController
     {
         private readonly StripeSettings _stripeSettings;
+        private readonly IOrderService _orderService;
+        private readonly IMapper _mapper;
 
-        public PaymentController(IOptions<StripeSettings> stripeSettings)
+        public PaymentController(IOptions<StripeSettings> stripeSettings, IOrderService orderService,IMapper mapper)
         {
             _stripeSettings = stripeSettings.Value;
+            _orderService = orderService;
+            _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult> CreateCheckOutSession(string amount)
+        public async Task<ActionResult> CreateCheckOutSession(int orderId, string successUrl,string cancelUrl)
         {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var order = await _orderService.GetUserOrder(email, orderId);
+            if (order == null) return NotFound(new ApisResponse(404));
+            if (order.OrderStatus == OrderStatus.PaymentRecieved) return BadRequest(new ApisResponse(400, "Order Already Paid"));
+            var mappedOrder = _mapper.Map<OrderToReturnDto>(order);
+            
+            #region payment
             var currency = "Usd";
-            var successUrl = "https://localhost:7185/api/Books";
-            var cancelUrl = "https://localhost:7185/api/Books";
             StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
             var options = new Stripe.Checkout.SessionCreateOptions
             {
@@ -32,24 +51,25 @@ namespace BookStore.Api.Controllers
                        PriceData = new SessionLineItemPriceDataOptions
                        {
                            Currency=currency,
-                           UnitAmount=Convert.ToInt32(amount)*100,
+                           UnitAmount=Convert.ToInt32(mappedOrder.Total)*100,
                            ProductData = new SessionLineItemPriceDataProductDataOptions
                            {
-                               Name = "bookStore",
-                               Description="bookStoreDesc"
-                           }
-
+                               Name = "Book Store",
+                               Description="Pay For Order"
+                           },
                        },
-                    Quantity=1
+                       Quantity=1
                    }
                 },
                 Mode = "payment",
                 SuccessUrl = successUrl,
-                CancelUrl = cancelUrl
+                CancelUrl = cancelUrl,
+                CustomerEmail = mappedOrder.BuyerEmail,
             };
             var service = new SessionService();
-            var session = service.Create(options);
-            return Ok(session.Url);  
+            var session = await  service.CreateAsync(options);
+            return Ok(session?.Url);
+            #endregion
         }
     }
 }
