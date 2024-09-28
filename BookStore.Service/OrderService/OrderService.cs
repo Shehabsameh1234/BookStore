@@ -58,8 +58,27 @@ namespace BookStore.Service.OrderService
         {
             var spec = new OrderSpecifications(email);
             var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
-            if (orders == null) return null;
+            if (orders.Count() <=0) return null;
             return orders;
         }
+        public async Task<Order?> GetUserOrder(string email,int orderId)
+        {
+            var spec = new OrderSpecifications(email,orderId);
+            var order = await _unitOfWork.Repository<Order>().GetByIdWithSpecAsync(spec);
+            if (order == null) return null;
+            return order;
+        }
+        public async Task<bool> DeleteOrder(string email, int orderId)
+        {
+            var spec = new OrderSpecifications(email, orderId);
+            var order = await _unitOfWork.Repository<Order>().GetByIdWithSpecAsync(spec);
+            if (order == null) return false;
+            _unitOfWork.Repository<Order>().Delete(order);
+            var result = await _unitOfWork.CompleteAsync();
+            if (result <= 0) return false;
+            return true;
+            
+        }
+
     }
 }
