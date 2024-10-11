@@ -28,7 +28,7 @@ namespace BookStore.Api.Controllers
         public async Task<ActionResult<Pagination<BookDto>>> GetBooks([FromQuery] QuerySpecParameters querySpec)
         {
             var books = await _booksService.GetAllBooksAsync(querySpec);
-            if (books == null || books.Count==0) return NotFound(new ApisResponse(404,"a7a"));
+            if (books == null || books.Count==0) return NotFound(new ApisResponse(404));
             var mappedBook = _mapper.Map<IReadOnlyList<Book>,IReadOnlyList<BookDto>>(books);
             var count = await _booksService.GetCountAsync(querySpec);
             return Ok(new Pagination<BookDto>(querySpec.PageIndex,querySpec.PageSize,count, mappedBook));
