@@ -43,7 +43,8 @@ namespace BookStore.Api.Extentions
             });
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password = null ;
+                options.Password.RequiredUniqueChars = 0 ;
+                options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationIdentityContext>();
 
             services.AddSingleton<IConnectionMultiplexer>(serviceProvidor =>
