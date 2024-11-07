@@ -43,8 +43,14 @@ namespace BookStore.Service.BasketService
                 foreach (var item1 in getBasket.Items)
                 {
                     if (item1.Id == item.Id)
-                    {
-                        return null;
+                    {if(item1.InStock==item1.Quantity)
+                        {
+                            return null;
+                        }
+                        item1.Quantity +=1;
+                        getBasket.TotalAmount = getBasket.Items.Sum(b => b.TotalPrice);
+                        await _basketRepository.UpdateBasketAsync(getBasket);
+                        return getBasket;
                     }
                 }
                 getBasket.Items.Add(item);
@@ -93,7 +99,7 @@ namespace BookStore.Service.BasketService
 
         public async Task<CustomerBasket?> UpdateItemQuantityAsync(string basketId, int productId, int quantity)
         {
-                        var getBasket = await _basketRepository.GetBasketById(basketId);
+            var getBasket = await _basketRepository.GetBasketById(basketId);
             if (getBasket != null)
             {
                 foreach (var item1 in getBasket.Items)

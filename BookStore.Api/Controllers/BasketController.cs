@@ -48,7 +48,7 @@ namespace BookStore.Api.Controllers
         public async Task<ActionResult<CustomerBasket>> AddItemToBasket(string basketId,int productId )
         {
             var basket =await  _basketService.AddItemToBasketAsync(basketId, productId);
-            if (basket == null) return BadRequest(new ApisResponse(400, "item Already in basket or item not found in stock"));
+            if (basket == null) return BadRequest(new ApisResponse(400, "stock limit reached"));
             return Ok(basket);
        
         }
