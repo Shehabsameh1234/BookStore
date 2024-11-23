@@ -80,7 +80,7 @@ namespace BookStore.Service.OrderService
             
         }
 
-        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliverymethods()
+        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliverymethodsAsync()
         {
             var deliveryMethods= await _unitOfWork.Repository<DeliveryMethod>().GetAllAsync();
             return deliveryMethods;

@@ -78,6 +78,12 @@ namespace BookStore.Api.Controllers
             };
             return Ok(result);
         }
+        [HttpGet("deliveryMethod")]
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
+        {
+            var deliveryMethod =await _orderService.GetDeliverymethodsAsync();
+            return Ok(deliveryMethod);
+        }
 
 
     }
