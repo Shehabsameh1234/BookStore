@@ -18,7 +18,7 @@ namespace BookStore.Core.Entities.Orders
             SubTotal = subTotal;
         }
         public string BuyerEmail { get; set; }
-        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.UtcNow;
+        public DateTime OrderDate { get; set; } = DateTime.Now;
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public OrderAddress OrderAddress { get; set; }
         public DeliveryMethod? DeliveryMethod { get; set; }
