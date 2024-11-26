@@ -68,7 +68,7 @@ namespace BookStore.Api.Controllers
             };
             var service = new SessionService();
             var session = await  service.CreateAsync(options);
-            return Ok(session?.Url);
+            return Ok(session);
             #endregion
         }
     }
