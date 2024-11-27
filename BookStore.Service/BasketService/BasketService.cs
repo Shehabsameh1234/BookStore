@@ -75,6 +75,23 @@ namespace BookStore.Service.BasketService
             }
         }
 
+        public async Task<CustomerBasket?> DeleteAllItemsFromBasketAsync(string basketId)
+        {
+            var getBasket = await _basketRepository.GetBasketById(basketId);
+            if (getBasket != null)
+            {
+                foreach (var item1 in getBasket.Items)
+                {
+                    getBasket.Items.Remove(item1);
+                    getBasket.TotalAmount = getBasket.Items.Sum(b => b.TotalPrice);
+                    await _basketRepository.UpdateBasketAsync(getBasket);
+                    return getBasket;
+                }
+               return getBasket;
+            }
+            else return null;
+        }
+
         public async Task<CustomerBasket?> DeleteItemFromBasketAsync(string basketId, int productId)
         {
             var getBasket = await _basketRepository.GetBasketById(basketId);

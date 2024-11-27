@@ -75,5 +75,15 @@ namespace BookStore.Api.Controllers
             return Ok(basket);
         }
 
+        [ProducesResponseType(typeof(CustomerBasket), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
+        [HttpDelete("deleteAllItems")]
+        public async Task<ActionResult<CustomerBasket>> DeleteAllItemFromBasket(string basketId)
+        {
+            var basket = await _basketService.DeleteAllItemsFromBasketAsync(basketId);
+            if (basket == null) return NotFound(new ApisResponse(404, "product or basket not found"));
+            return Ok(basket);
+        }
+
     }
 }
