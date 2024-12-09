@@ -11,6 +11,7 @@ using BookStore.Service.AuthService;
 using BookStore.Service.BasketService;
 using BookStore.Service.BooksService;
 using BookStore.Service.OrderService;
+using BookStore.Service.PaymentService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +31,7 @@ namespace BookStore.Api.Extentions
             services.AddScoped(typeof(IBooksService), typeof(BooksService));
             services.AddScoped(typeof(IBasketService), typeof(BasketService));
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
-
+            services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
 
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddDbContext<StoreContext>(options =>

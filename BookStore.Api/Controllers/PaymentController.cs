@@ -22,12 +22,14 @@ namespace BookStore.Api.Controllers
         private readonly StripeSettings _stripeSettings;
         private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
+        private readonly IPaymentService _paymentService;
 
-        public PaymentController(IOptions<StripeSettings> stripeSettings, IOrderService orderService,IMapper mapper)
+        public PaymentController(IOptions<StripeSettings> stripeSettings, IOrderService orderService,IMapper mapper,IPaymentService paymentService)
         {
             _stripeSettings = stripeSettings.Value;
             _orderService = orderService;
             _mapper = mapper;
+            _paymentService = paymentService;
         }
         [HttpGet]
         public async Task<ActionResult> CreateCheckOutSession(int orderId, string successUrl,string cancelUrl)
@@ -70,6 +72,13 @@ namespace BookStore.Api.Controllers
             var session = await  service.CreateAsync(options);
             return Ok(session);
             #endregion
+        }
+        [HttpPost("sendEmail")]
+        public async Task<ActionResult> SendEmailToUser(int orderId)
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var sendEmail = _paymentService.SendEmailToCustomer(orderId, email);
+            return Ok(sendEmail);
         }
     }
 }
