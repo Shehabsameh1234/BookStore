@@ -3,6 +3,7 @@ using BookStore.Api.Errors;
 using BookStore.Core.Dtos;
 using BookStore.Core.Entities.Orders;
 using BookStore.Core.Helpers;
+using BookStore.Core.IUnitOfWork;
 using BookStore.Core.Service.Contract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,13 +24,15 @@ namespace BookStore.Api.Controllers
         private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
         private readonly IPaymentService _paymentService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PaymentController(IOptions<StripeSettings> stripeSettings, IOrderService orderService,IMapper mapper,IPaymentService paymentService)
+        public PaymentController(IOptions<StripeSettings> stripeSettings, IOrderService orderService,IMapper mapper,IPaymentService paymentService,IUnitOfWork unitOfWork)
         {
             _stripeSettings = stripeSettings.Value;
             _orderService = orderService;
             _mapper = mapper;
             _paymentService = paymentService;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet]
         public async Task<ActionResult> CreateCheckOutSession(int orderId, string successUrl,string cancelUrl)
@@ -76,9 +79,19 @@ namespace BookStore.Api.Controllers
         [HttpPost("sendEmail")]
         public async Task<ActionResult> SendEmailToUser(int orderId)
         {
+            var order = await _unitOfWork.Repository<Order>().GetByIdAsync(orderId);
+            if (order == null) return NotFound(new ApisResponse(404, "order not found"));
+            if (order?.OrderStatus == OrderStatus.PaymentRecieved)
+            {
+                return BadRequest(new ApisResponse(404, "order already paid"));
+            }
             var email = User.FindFirstValue(ClaimTypes.Email);
              _paymentService.SendEmailToCustomer(orderId, email);
-            return Ok();
+            var result = new
+            {
+                resulr = "email has been sent"
+            };
+            return Ok(result);
         }
     }
 }

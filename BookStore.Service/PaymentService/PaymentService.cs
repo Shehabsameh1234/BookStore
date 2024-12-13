@@ -16,7 +16,7 @@ namespace BookStore.Service.PaymentService
             message.From = new MailAddress(fromMail);
             message.Subject = "payment status";
             message.To.Add(new MailAddress(email));
-            message.Body = "<html><body> <div>\r\n <h1 style=\"color: green;\">payment successfully made for order number 66</h1>\r\n    <h3>for more infomation email us : shehabsameh987123&#64;gmail.com</h3>\r\n</div> </body></html>";
+            message.Body = $"<html><body> <div>\r\n <h1 style=\"color: green;\">payment successfully made for order number {orderId} </h1>\r\n    <h3>for more infomation email us : shehabsameh987123&#64;gmail.com</h3>\r\n</div> </body></html>";
             message.IsBodyHtml = true;
             var smtp = new SmtpClient("smtp.gmail.com")
             {
