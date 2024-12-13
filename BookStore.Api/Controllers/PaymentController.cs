@@ -77,8 +77,8 @@ namespace BookStore.Api.Controllers
         public async Task<ActionResult> SendEmailToUser(int orderId)
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
-            var sendEmail = _paymentService.SendEmailToCustomer(orderId, email);
-            return Ok(sendEmail);
+             _paymentService.SendEmailToCustomer(orderId, email);
+            return Ok();
         }
     }
 }

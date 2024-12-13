@@ -14,8 +14,8 @@ namespace BookStore.Core.Send_Mail
         {
             var client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;
-            client.Credentials = new NetworkCredential("ahmedKhaled.route@gmail.com", "ezsigncambdmlwcg");
-            client.Send("ahmedKhaled.route@gmail.com", email.To, email.Title, email.Body);
+            client.Credentials = new NetworkCredential("shehabsameh987123@gmail.com", "fktn ivsn rnix dpjj");
+            client.Send("shehabsameh987123@gmail.com", email.To, email.Title, email.Body);
         }
     }
 }

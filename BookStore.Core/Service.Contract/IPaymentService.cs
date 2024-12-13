@@ -9,6 +9,6 @@ namespace BookStore.Core.Service.Contract
 {
     public interface IPaymentService
     {
-        Email SendEmailToCustomer(int orderId, string email);
+        void SendEmailToCustomer(int orderId, string email);
     }
 }
