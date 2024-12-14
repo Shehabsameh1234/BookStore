@@ -1,7 +1,10 @@
-﻿using BookStore.Core.Entities.Orders;
+﻿using BookStore.Core.Entities.Books;
+using BookStore.Core.Entities.Orders;
 using BookStore.Core.IUnitOfWork;
 using BookStore.Core.Repository.Contract;
+using BookStore.Core.Send_Mail;
 using BookStore.Core.Service.Contract;
+using BookStore.Core.Specifications.BookSpecifications;
 using BookStore.Core.Specifications.OrderSpecifications;
 
 namespace BookStore.Service.OrderService
@@ -10,11 +13,13 @@ namespace BookStore.Service.OrderService
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IBooksService _booksService;
 
-        public OrderService(IBasketRepository basketRepository,IUnitOfWork unitOfWork)
+        public OrderService(IBasketRepository basketRepository,IUnitOfWork unitOfWork,IBooksService booksService)
         {
             _basketRepository = basketRepository;
             _unitOfWork = unitOfWork;
+            _booksService = booksService;
         }
         public async Task<Order?> CreateOrderAsync(string basketId, string buyerEmail, OrderAddress orderAddress, int deliveryMethodId)
         {
@@ -45,10 +50,8 @@ namespace BookStore.Service.OrderService
         {
             var spec =new OrderWithDeliveryMethodSpecifications(orderId);
            var order =await  _unitOfWork.Repository<Order>().GetByIdWithSpecAsync(spec);
-           if (order == null) return null;
-
+           if (order == null || order.OrderStatus==OrderStatus.PaymentRecieved) return null;
            order.OrderStatus = OrderStatus.PaymentRecieved;
-
            _unitOfWork.Repository<Order>().Update(order);
            await  _unitOfWork.CompleteAsync();
            return order;
@@ -84,6 +87,21 @@ namespace BookStore.Service.OrderService
         {
             var deliveryMethods= await _unitOfWork.Repository<DeliveryMethod>().GetAllAsync();
             return deliveryMethods;
+        }
+
+        public async Task<Order?> UpdateItemsQuantityAfterPayment(int orderId)
+        {
+            var order = await _unitOfWork.Repository<Order>().GetByIdAsync(orderId);
+            foreach (var item in order.OrderItems)
+            {
+                var bookSpec = new BookWithCategorySpecifications(item.ProductId);
+                var book = await _unitOfWork.Repository<Book>().GetByIdWithSpecAsync(bookSpec);
+                book.InStock = book.InStock-item.Quantity;
+                _unitOfWork.Repository<Book>().Update(book);
+            }
+            var result = await _unitOfWork.CompleteAsync();
+            if (result <= 0) return null;
+            return order;
         }
     }
 }

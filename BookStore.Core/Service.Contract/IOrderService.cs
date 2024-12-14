@@ -15,5 +15,6 @@ namespace BookStore.Core.Service.Contract
         Task<IReadOnlyList<DeliveryMethod>> GetDeliverymethodsAsync();
         Task<Order?> GetUserOrder(string email, int orderId);
         Task<bool> DeleteOrder(string email, int orderId);
+        Task<Order?> UpdateItemsQuantityAfterPayment(int orderId);
     }
 }
