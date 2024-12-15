@@ -38,7 +38,7 @@ namespace BookStore.Api.Controllers
         [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
         [HttpPut]
         public async Task<ActionResult<OrderToReturnDto>> UpdateOrderStatus(int orderId)
-        y{
+        {
             var order = await _orderService.UpdateOrderSatus(orderId);
             if (order == null) return NotFound(new ApisResponse(404));
             await _orderService.UpdateItemsQuantityAfterPayment(orderId);
