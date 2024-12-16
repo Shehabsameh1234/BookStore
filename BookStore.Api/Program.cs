@@ -4,6 +4,8 @@ using BookStore.Repository.ConText;
 using BookStore.Repository.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
+using Stripe;
 
 namespace BookStore.Api
 {
@@ -14,6 +16,7 @@ namespace BookStore.Api
             var builder = WebApplication.CreateBuilder(args);
 
             #region Services
+
             // Add services to the container.
             builder.Services.ApplicationServices(builder.Configuration);
             builder.Services.AddControllers();

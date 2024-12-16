@@ -10,6 +10,7 @@ using BookStore.Repository.UnitOfWork;
 using BookStore.Service.AuthService;
 using BookStore.Service.BasketService;
 using BookStore.Service.BooksService;
+using BookStore.Service.CashingService;
 using BookStore.Service.OrderService;
 using BookStore.Service.PaymentService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,7 +26,11 @@ namespace BookStore.Api.Extentions
     {
         public static IServiceCollection ApplicationServices (this IServiceCollection services ,ConfigurationManager configuration)
         {
+       
             services.AddScoped(typeof(IUnitOfWork),typeof(UnitOfWork));
+
+            services.AddSingleton(typeof(ICashingService), typeof(CashingService));
+
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 
             services.AddScoped(typeof(IBooksService), typeof(BooksService));

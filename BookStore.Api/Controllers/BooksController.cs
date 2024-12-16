@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.Api.Errors;
+using BookStore.Api.Helper;
 using BookStore.Core.Dtos;
 using BookStore.Core.Entities.Books;
 using BookStore.Core.Helpers;
@@ -24,6 +25,7 @@ namespace BookStore.Api.Controllers
         [ProducesResponseType(typeof(BookDto),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
 
+        [Cashed(600)]
         [HttpGet]
         public async Task<ActionResult<Pagination<BookDto>>> GetBooks([FromQuery] QuerySpecParameters querySpec)
         {
@@ -47,6 +49,7 @@ namespace BookStore.Api.Controllers
         [ProducesResponseType(typeof(Category),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApisResponse), StatusCodes.Status404NotFound)]
 
+        [Cashed(600)]
         [HttpGet("categories")]
         public async Task<ActionResult<Category>> GetCategories()
         {
