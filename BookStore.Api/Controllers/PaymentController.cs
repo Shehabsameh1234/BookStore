@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
-using static System.Net.WebRequestMethods;
+
 
 
 namespace BookStore.Api.Controllers

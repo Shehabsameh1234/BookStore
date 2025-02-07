@@ -1,11 +1,7 @@
 ﻿using BookStore.Core.Entities;
 using BookStore.Core.Entities.Books;
 using BookStore.Core.Specifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BookStore.Core.Repository.Contract
 {

@@ -2,7 +2,6 @@
 using BookStore.Core.Entities.Orders;
 using BookStore.Core.IUnitOfWork;
 using BookStore.Core.Repository.Contract;
-using BookStore.Core.Send_Mail;
 using BookStore.Core.Service.Contract;
 using BookStore.Core.Specifications.BookSpecifications;
 using BookStore.Core.Specifications.OrderSpecifications;

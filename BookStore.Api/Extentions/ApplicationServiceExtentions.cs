@@ -14,7 +14,6 @@ using BookStore.Service.CashingService;
 using BookStore.Service.OrderService;
 using BookStore.Service.PaymentService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

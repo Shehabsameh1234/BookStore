@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BookStore.Core.Dtos;
-using BookStore.Core.Entities.Basket;
 using BookStore.Core.Entities.Books;
 using BookStore.Core.Entities.Orders;
 
